@@ -1,0 +1,111 @@
+ // C++ code
+//
+
+//bool digit[7] = {true, true, true, true, true, true, true};
+
+
+//Truth Table for single 7-bit digit display
+bool possibleDisplays[10][7] = {
+  //a to f clockwise with g in  the middle
+  //a0    b1    c2  d3   e4  f5   g6
+  {true,true,true,true,true,true,false},//0
+  {false,true,true,false,false,false,false},//1
+  {true,true,false,true,true,false,true},//2
+  {true,true,true,true,false,false,true},//3
+  {false,true,true,false,false,true,true},//4
+  {true,false,true,true,false,true,true},//5
+  {true,false,true,true,true,true,true},//6
+  {true,true,true,false,false,false,false},//7
+  {true,true,true,true,true,true,true},//8
+  {true,true,true,false,false,true,true}//9
+};
+//innit for led output pins
+int ledA = 2;
+int ledB = 3;
+int ledC = 4;
+int ledD = 5;
+int ledE = 6;
+int ledF = 7;
+int ledG = 8;
+
+//current display, innit to 0
+int display = 0;
+
+
+void setup()
+{
+  Serial.begin(9600);
+};
+
+
+
+int NUM = 0;
+void loop()
+{
+  
+  int userInput = 0;
+  //take user input
+  if (1==1){//(Serial.available() > 0){    // is a character available?
+    userInput = Serial.read();  
+    //give user feedback that number worked
+    Serial.println("Ran");
+    Serial.println(userInput );
+    if ((userInput >= -1) && (userInput <= 9)){
+      Serial.print("Numebr received: ");
+      Serial.println(userInput);   
+    }
+    userInput = NUM;
+    if (possibleDisplays[userInput][0] == true){ // Check A
+      analogWrite(ledA, 255);
+    }else {
+      analogWrite(ledA, LOW);
+    }
+
+    if (possibleDisplays[userInput][1] == true){//check B
+      if (possibleDisplays[userInput][5] == true){
+        analogWrite(ledB, 255);
+        analogWrite(ledF, 255);
+      }else{
+        analogWrite(ledB, 255);
+        analogWrite(ledF, LOW);
+      }
+    }else {
+      analogWrite(ledB, LOW);
+      analogWrite(ledF, 255);
+    }
+
+    if (possibleDisplays[userInput][6] == true){//check g
+      analogWrite(ledG, 255);
+    }else{
+      analogWrite(ledG, LOW);
+    }
+
+    if (possibleDisplays[userInput][2] == true){//check c and e
+      if (possibleDisplays[userInput][4] == true){
+        analogWrite(ledC, 255);
+        analogWrite(ledE, 255);
+      }else{
+        analogWrite(ledC, 255);
+        analogWrite(ledE, LOW);
+      }
+    }else{
+      analogWrite(ledC, LOW);
+      analogWrite(ledE, 255);
+    }
+    if (possibleDisplays[userInput][3] == true){//check d
+      analogWrite(ledD, 255);
+    }else{
+      analogWrite(ledD, LOW);
+    }
+    delay(10000);
+    if(NUM == 9) {
+      NUM=0;
+    } else{
+      NUM += 1;
+    }
+  }else { // reject number if its not within valid range
+      ///Serial.println("Not a number.");
+      int iasd = 9;
+  }
+ 
+}
